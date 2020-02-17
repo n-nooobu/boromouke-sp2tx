@@ -2,31 +2,45 @@ import io
 import os
 
 # Imports the Google Cloud client library
-from google.cloud import speech
-from google.cloud.speech import enums
-from google.cloud.speech import types
+from google.cloud import speech_v1p1beta1 as speech
 
-# Instantiates a client
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './vast-box-268016-0698f0b37e52.json'
+
 client = speech.SpeechClient()
 
-# The name of the audio file to transcribe
-file_name = os.path.join(
-    os.path.dirname(__file__),
-    'resources',
-    'audio.raw')
-
-# Loads the audio into memory
-with io.open(file_name, 'rb') as audio_file:
-    content = audio_file.read()
-    audio = types.RecognitionAudio(content=content)
-
-config = types.RecognitionConfig(
-    encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+audio = speech.types.RecognitionAudio(uri='gs://boromouke-sp2tx/b.flac')
+config = speech.types.RecognitionConfig(
+    encoding=speech.enums.RecognitionConfig.AudioEncoding.FLAC,
     sample_rate_hertz=16000,
-    language_code='en-US')
+    language_code='ja-JP',
+    enable_automatic_punctuation=True,
+    enable_speaker_diarization=False,
+    diarization_speaker_count=2)
 
-# Detects speech in the audio file
-response = client.recognize(config, audio)
+operation = client.long_running_recognize(config, audio)
 
+print('Waiting for operation to complete...')
+response = operation.result(timeout=90)
+
+"""
+# Each result is for a consecutive portion of the audio. Iterate through
+# them to get the transcripts for the entire audio file.
 for result in response.results:
-    print('Transcript: {}'.format(result.alternatives[0].transcript))
+    # The first alternative is the most likely one for this portion.
+    print(u'Transcript: {}'.format(result.alternatives[0].transcript))
+    print('Confidence: {}'.format(result.alternatives[0].confidence))
+"""
+"""
+result = response.results[-1]
+
+words_info = result.alternatives[0].words
+
+for word_info in words_info:
+    print("word: '{}', speaker_tag: {}".format(word_info.word, word_info.speaker_tag))
+"""
+
+for i, result in enumerate(response.results):
+    alternative = result.alternatives[0]
+    print('-' * 20)
+    print('First alternative of result {}'.format(i))
+    print('Transcript: {}'.format(alternative.transcript))
