@@ -8,7 +8,7 @@ from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
 
-file_name = 'trial'
+file_name = 'a'
 
 # flacに変換
 sound = pydub.AudioSegment.from_file('sound/' + file_name + '.mp3', 'mp3')
@@ -17,7 +17,7 @@ sound = sound.set_frame_rate(16000)
 sound.export('sound/' + file_name + '.flac', format='flac')
 
 # 環境変数設定 私のvast-box-268016-0698f0b37e52というGCPプロジェクトを使いますよという宣言
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './vast-box-268016-0698f0b37e52.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './boromouke-sp2tx-3adf9e009328.json'
 
 # Upload to Google Cloud Storage(1分以上の音声をテキストに変換する場合はGCSに配置しなきゃダメ)
 client_sto = storage.Client()
