@@ -1,3 +1,5 @@
+"""https://qiita.com/pyru89kwmr/items/cb896e9ce7257a7d3514"""
+
 import os
 from google.cloud import storage
 
