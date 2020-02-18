@@ -1,5 +1,6 @@
 venv/
 .idea/
 boromouke-sp2tx-3adf9e009328.json
-sound/
-word/
+sound/*.mp3
+sound/*.flac
+word/*.docx
