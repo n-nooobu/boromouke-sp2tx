@@ -16,7 +16,7 @@ google-resumable-media==0.5.0
 googleapis-common-protos==1.51.0
 grpcio==1.27.1
 idna==2.8
-lxml==4.5.0
+lxml==4.6.2
 paramiko==2.7.1
 protobuf==3.11.3
 pyasn1==0.4.8
